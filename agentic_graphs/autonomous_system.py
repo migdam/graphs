@@ -4,12 +4,13 @@ Main orchestrator that autonomously creates beautiful 3D visualizations
 """
 
 import pandas as pd
-from typing import Optional, Any, Dict
+from typing import Optional, Any, Dict, Tuple
 from pathlib import Path
 
 from .agent_core import AutonomousGraphAgent, DataProfile
 from .data_connectors import AutoConnector, load_data
 from .visualizers_3d import VisualizerFactory
+from .ai_analytics import AIGraphAnalytics, AnalyticsReport
 import plotly.graph_objects as go
 
 
@@ -39,9 +40,13 @@ class AutonomousGraphSystem:
         self.verbose = verbose
         self.agent = AutonomousGraphAgent(verbose=verbose)
         self.data_connector = AutoConnector(verbose=verbose)
+        self.analytics = AIGraphAnalytics(verbose=verbose)
 
         if self.verbose:
             print("🤖 Autonomous 3D Graph System Initialized")
+            print("  ✓ Decision Agent")
+            print("  ✓ Data Connectors")
+            print("  ✓ AI Analytics Engine")
             print("="*60)
 
     def generate(
@@ -236,6 +241,157 @@ class AutonomousGraphSystem:
     def available_visualizations(self) -> list:
         """Get list of all available 3D visualization types"""
         return VisualizerFactory.available_types()
+
+    def run_analytics(
+        self,
+        data_source: Any,
+        viz_type: Optional[str] = None,
+        source_type: Optional[str] = None,
+        export_path: Optional[str] = None,
+        **kwargs
+    ) -> AnalyticsReport:
+        """
+        Run AI-powered analytics on data.
+
+        Args:
+            data_source: Data source to analyze
+            viz_type: Optional visualization type (for context)
+            source_type: Optional data source type override
+            export_path: Optional path to export JSON report
+            **kwargs: Additional parameters
+
+        Returns:
+            AnalyticsReport with comprehensive insights
+
+        Example:
+            >>> system = AutonomousGraphSystem()
+            >>> report = system.run_analytics('data.csv')
+            >>> print(report.natural_language_summary)
+        """
+        # Load data
+        df = self.data_connector.load(data_source, source_type=source_type, **kwargs)
+
+        # Determine viz type if not specified
+        if viz_type is None:
+            profile = self.agent.analyze_data(df)
+            viz_type = profile.suggested_visualizations[0]
+        else:
+            profile = None
+
+        # Run analytics
+        report = self.analytics.analyze(df, viz_type, profile)
+
+        # Export if requested
+        if export_path:
+            self.analytics.export_report(report, export_path)
+
+        return report
+
+    def generate_with_analytics(
+        self,
+        data_source: Any,
+        output_path: Optional[str] = None,
+        analytics_path: Optional[str] = None,
+        viz_type: Optional[str] = None,
+        source_type: Optional[str] = None,
+        title: Optional[str] = None,
+        show: bool = True,
+        **kwargs
+    ) -> Tuple[go.Figure, AnalyticsReport]:
+        """
+        Generate visualization AND run AI analytics in one step.
+
+        Args:
+            data_source: Data source
+            output_path: Where to save visualization
+            analytics_path: Where to save analytics report (JSON)
+            viz_type: Optional visualization type
+            source_type: Optional data source type
+            title: Optional title
+            show: Whether to display
+            **kwargs: Additional parameters
+
+        Returns:
+            Tuple of (Figure, AnalyticsReport)
+
+        Example:
+            >>> system = AutonomousGraphSystem()
+            >>> fig, report = system.generate_with_analytics('data.csv')
+            >>> print(report.key_findings)
+        """
+        if self.verbose:
+            print("\n🚀 Starting Autonomous Generation with AI Analytics")
+            print("="*60)
+
+        # Separate visualizer kwargs from data loading kwargs
+        visualizer_params = {
+            'x_col', 'y_col', 'z_col', 'color_col', 'size_col',
+            'source_col', 'target_col', 'weight_col', 'node_color_col',
+            'layout', 'colorscale'
+        }
+        viz_kwargs = {k: v for k, v in kwargs.items() if k in visualizer_params}
+        data_kwargs = {k: v for k, v in kwargs.items() if k not in visualizer_params}
+
+        # Load data
+        if self.verbose:
+            print("\n📥 Step 1: Loading Data")
+            print("-"*60)
+
+        df = self.data_connector.load(data_source, source_type=source_type, **data_kwargs)
+
+        # Analyze data and decide on visualization
+        if self.verbose:
+            print("\n🧠 Step 2: Analyzing Data & Making Decisions")
+            print("-"*60)
+
+        selected_viz, profile = self.agent.decide_visualization(df, preference=viz_type)
+
+        # Run AI analytics
+        if self.verbose:
+            print(f"\n🤖 Step 3: Running AI Analytics")
+            print("-"*60)
+
+        report = self.analytics.analyze(df, selected_viz, profile)
+
+        # Generate visualization
+        if self.verbose:
+            print(f"\n🎨 Step 4: Generating {selected_viz.upper()} Visualization")
+            print("-"*60)
+
+        visualizer = VisualizerFactory.create(selected_viz, verbose=self.verbose)
+
+        if output_path is None:
+            output_dir = Path('examples')
+            output_dir.mkdir(exist_ok=True)
+            output_path = str(output_dir / f'autonomous_{selected_viz}.html')
+
+        fig = visualizer.create(
+            df=df,
+            output_path=output_path,
+            title=title,
+            **viz_kwargs
+        )
+
+        # Export analytics if requested
+        if analytics_path:
+            self.analytics.export_report(report, analytics_path)
+        elif output_path:
+            # Auto-export analytics next to visualization
+            analytics_auto_path = Path(output_path).with_suffix('.analytics.json')
+            self.analytics.export_report(report, str(analytics_auto_path))
+
+        # Display if requested
+        if show:
+            if self.verbose:
+                print("\n👁️ Displaying visualization...")
+            fig.show()
+
+        if self.verbose:
+            print("\n" + "="*60)
+            print("✅ Autonomous Generation with Analytics Complete!")
+            print("="*60)
+
+        return fig, report
 
 
 # Convenience functions for quick usage

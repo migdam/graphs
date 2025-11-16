@@ -36,8 +36,9 @@ from .data_connectors import (
     APIConnector
 )
 from .visualizers_3d import VisualizerFactory
+from .ai_analytics import AIGraphAnalytics, AnalyticsReport, GraphInsight
 
-__version__ = '1.0.0'
+__version__ = '1.1.0'
 __author__ = 'Autonomous Graph System'
 
 __all__ = [
@@ -61,4 +62,9 @@ __all__ = [
 
     # Visualizers
     'VisualizerFactory',
+
+    # AI Analytics
+    'AIGraphAnalytics',
+    'AnalyticsReport',
+    'GraphInsight',
 ]

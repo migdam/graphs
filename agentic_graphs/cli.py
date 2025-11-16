@@ -120,6 +120,26 @@ Examples:
         help='Show visualization suggestions without generating'
     )
 
+    # AI Analytics options
+    parser.add_argument(
+        '--analytics',
+        action='store_true',
+        help='Run AI-powered analytics on the data'
+    )
+
+    parser.add_argument(
+        '--analytics-only',
+        action='store_true',
+        help='Only run analytics without visualization'
+    )
+
+    parser.add_argument(
+        '--export-analytics',
+        type=str,
+        default=None,
+        help='Export analytics report to JSON file'
+    )
+
     # Additional visualizer parameters
     parser.add_argument('--x-col', type=str, help='X-axis column name')
     parser.add_argument('--y-col', type=str, help='Y-axis column name')
@@ -170,6 +190,15 @@ Examples:
             system.suggest_visualizations(data_source, source_type=args.source_type)
             return 0
 
+        # Handle analytics-only mode
+        if args.analytics_only:
+            system.run_analytics(
+                data_source,
+                source_type=args.source_type,
+                export_path=args.export_analytics
+            )
+            return 0
+
         # Prepare visualizer kwargs
         viz_kwargs = {}
         if args.x_col:
@@ -183,16 +212,28 @@ Examples:
         if args.size_col:
             viz_kwargs['size_col'] = args.size_col
 
-        # Generate visualization
-        system.generate(
-            data_source=data_source,
-            output_path=args.output,
-            viz_type=args.viz_type,
-            source_type=args.source_type,
-            title=args.title,
-            show=not args.no_show,
-            **viz_kwargs
-        )
+        # Generate visualization (with or without analytics)
+        if args.analytics:
+            system.generate_with_analytics(
+                data_source=data_source,
+                output_path=args.output,
+                analytics_path=args.export_analytics,
+                viz_type=args.viz_type,
+                source_type=args.source_type,
+                title=args.title,
+                show=not args.no_show,
+                **viz_kwargs
+            )
+        else:
+            system.generate(
+                data_source=data_source,
+                output_path=args.output,
+                viz_type=args.viz_type,
+                source_type=args.source_type,
+                title=args.title,
+                show=not args.no_show,
+                **viz_kwargs
+            )
 
         return 0
 

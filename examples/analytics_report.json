@@ -1,0 +1,112 @@
+{
+  "timestamp": "2025-11-16T11:41:52.376868",
+  "data_summary": {
+    "total_records": 15,
+    "total_columns": 6,
+    "numeric_columns": 4,
+    "categorical_columns": 2,
+    "missing_values": 0,
+    "missing_percentage": 0.0,
+    "memory_usage_mb": 0.0023202896118164062
+  },
+  "insights": [
+    {
+      "category": "pattern",
+      "title": "Multimodal Distribution in x",
+      "description": "x shows 2 distinct clusters or groups",
+      "confidence": 0.75,
+      "severity": "medium",
+      "data_points": {
+        "column": "x",
+        "peaks": 2
+      },
+      "recommendation": "Consider grouping or segmentation analysis for x"
+    },
+    {
+      "category": "pattern",
+      "title": "Multimodal Distribution in z",
+      "description": "z shows 4 distinct clusters or groups",
+      "confidence": 0.75,
+      "severity": "medium",
+      "data_points": {
+        "column": "z",
+        "peaks": 4
+      },
+      "recommendation": "Consider grouping or segmentation analysis for z"
+    },
+    {
+      "category": "trend",
+      "title": "Moderate Positive Correlation",
+      "description": "x and value show moderate positive correlation (r=0.853)",
+      "confidence": 0.8528148540248106,
+      "severity": "medium",
+      "data_points": {
+        "col1": "x",
+        "col2": "value",
+        "correlation": 0.8528148540248106
+      },
+      "recommendation": "Strong relationship between x and value suggests predictive potential"
+    },
+    {
+      "category": "trend",
+      "title": "Increasing Trend in x",
+      "description": "x shows a clear increasing trend over the dataset",
+      "confidence": 0.3100303951367783,
+      "severity": "medium",
+      "data_points": {
+        "column": "x",
+        "slope": 0.09714285714285721
+      },
+      "recommendation": "Monitor x - trend suggests continued increasing pattern"
+    },
+    {
+      "category": "trend",
+      "title": "Increasing Trend in z",
+      "description": "z shows a clear increasing trend over the dataset",
+      "confidence": 0.3016917293233085,
+      "severity": "medium",
+      "data_points": {
+        "column": "z",
+        "slope": 0.07642857142857148
+      },
+      "recommendation": "Monitor z - trend suggests continued increasing pattern"
+    },
+    {
+      "category": "relationship",
+      "title": "category Influences x",
+      "description": "category groups show distinct x values",
+      "confidence": 0.4505726184279022,
+      "severity": "medium",
+      "data_points": {
+        "categorical": "category",
+        "numeric": "x",
+        "variance_ratio": 0.4505726184279022
+      },
+      "recommendation": "Use category for color/grouping in visualizations"
+    }
+  ],
+  "patterns": [
+    "x shows 2 distinct clusters or groups",
+    "z shows 4 distinct clusters or groups"
+  ],
+  "anomalies": [],
+  "trends": [
+    "x and value show moderate positive correlation (r=0.853)",
+    "x shows a clear increasing trend over the dataset",
+    "z shows a clear increasing trend over the dataset"
+  ],
+  "recommendations": [
+    "Consider grouping or segmentation analysis for x",
+    "Consider grouping or segmentation analysis for z",
+    "Strong relationship between x and value suggests predictive potential",
+    "Use category for color encoding to reveal patterns"
+  ],
+  "summary": "This scatter visualization represents a dataset with 15 records and 6 variables. Analysis identified 1 high-confidence insights. Detected 2 distinct patterns in the data structure. Identified 3 significant trends or correlations.",
+  "key_findings": [
+    "Moderate Positive Correlation: x and value show moderate positive correlation (r=0.853)",
+    "Multimodal Distribution in x: x shows 2 distinct clusters or groups",
+    "Multimodal Distribution in z: z shows 4 distinct clusters or groups",
+    "category Influences x: category groups show distinct x values",
+    "Increasing Trend in x: x shows a clear increasing trend over the dataset"
+  ]
+}

@@ -1,0 +1,39 @@
+{
+  "timestamp": "2025-11-16T11:41:51.903820",
+  "data_summary": {
+    "total_records": 10,
+    "total_columns": 4,
+    "numeric_columns": 1,
+    "categorical_columns": 3,
+    "missing_values": 0,
+    "missing_percentage": 0.0,
+    "memory_usage_mb": 0.0019893646240234375
+  },
+  "insights": [
+    {
+      "category": "pattern",
+      "title": "Moderate Network",
+      "description": "Network has 6 nodes and 10 edges (density: 0.333)",
+      "confidence": 1.0,
+      "severity": "low",
+      "data_points": {
+        "nodes": 6,
+        "edges": 10,
+        "density": 0.3333333333333333
+      },
+      "recommendation": "Network is moderate, consider hub analysis"
+    }
+  ],
+  "patterns": [
+    "Network has 6 nodes and 10 edges (density: 0.333)"
+  ],
+  "anomalies": [],
+  "trends": [],
+  "recommendations": [
+    "Network is moderate, consider hub analysis"
+  ],
+  "summary": "This network visualization represents a dataset with 10 records and 4 variables. Analysis identified 1 high-confidence insights. Detected 1 distinct patterns in the data structure.",
+  "key_findings": [
+    "Moderate Network: Network has 6 nodes and 10 edges (density: 0.333)"
+  ]
+}
