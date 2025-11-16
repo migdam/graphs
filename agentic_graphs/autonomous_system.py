@@ -64,7 +64,7 @@ class AutonomousGraphSystem:
             source_type: Optional data source type override (e.g., 'csv', 'json', 'api')
             title: Optional custom title for the visualization
             show: Whether to display the visualization
-            **kwargs: Additional parameters passed to the visualizer
+            **kwargs: Additional parameters (visualizer params like x_col, y_col, or data loader params)
 
         Returns:
             Plotly Figure object
@@ -73,12 +73,21 @@ class AutonomousGraphSystem:
             print("\n🚀 Starting Autonomous Graph Generation")
             print("="*60)
 
+        # Separate visualizer kwargs from data loading kwargs
+        visualizer_params = {
+            'x_col', 'y_col', 'z_col', 'color_col', 'size_col',
+            'source_col', 'target_col', 'weight_col', 'node_color_col',
+            'layout', 'colorscale'
+        }
+        viz_kwargs = {k: v for k, v in kwargs.items() if k in visualizer_params}
+        data_kwargs = {k: v for k, v in kwargs.items() if k not in visualizer_params}
+
         # Step 1: Load data from any source
         if self.verbose:
             print("\n📥 Step 1: Loading Data")
             print("-"*60)
 
-        df = self.data_connector.load(data_source, source_type=source_type, **kwargs)
+        df = self.data_connector.load(data_source, source_type=source_type, **data_kwargs)
 
         # Step 2: Analyze data and decide on visualization
         if self.verbose:
@@ -105,7 +114,7 @@ class AutonomousGraphSystem:
             df=df,
             output_path=output_path,
             title=title,
-            **kwargs
+            **viz_kwargs
         )
 
         # Step 4: Display if requested
