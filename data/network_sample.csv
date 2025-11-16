@@ -1,0 +1,11 @@
+source,target,weight,category
+Alice,Bob,5,friend
+Alice,Charlie,3,colleague
+Bob,David,7,friend
+Charlie,David,2,colleague
+David,Eve,6,friend
+Eve,Frank,4,colleague
+Frank,Alice,8,friend
+Bob,Charlie,5,colleague
+Eve,Alice,3,family
+Frank,Bob,6,friend
