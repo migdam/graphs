@@ -1,16 +1,20 @@
 # 🤖 Autonomous 3D Graph Generation System
 
-A fully autonomous system that creates **beautiful 3D visualizations** from any data source. Simply provide your data, and the AI-powered agent analyzes it, determines the best visualization approach, and generates stunning interactive 3D graphs.
+**Version 1.1.0** - Now with AI-Powered Analytics!
+
+A fully autonomous system that creates **beautiful 3D visualizations** from any data source. Simply provide your data, and the AI-powered agent analyzes it, determines the best visualization approach, generates stunning interactive 3D graphs, and provides intelligent insights.
 
 ## ✨ Key Features
 
 - **🧠 Fully Autonomous**: Automatically analyzes data and selects the best visualization
 - **📊 Multiple Data Sources**: CSV, JSON, Excel, SQL databases, REST APIs, pandas DataFrames
 - **🎨 Beautiful 3D Visualizations**: Network graphs, scatter plots, surfaces, lines, and more
+- **🤖 AI-Powered Analytics**: Automatic insight extraction, pattern detection, trend analysis
 - **🔍 Intelligent Analysis**: Detects patterns, relationships, and data characteristics
 - **⚡ Easy to Use**: One-line command to visualize any data
 - **🎯 Customizable**: Override autonomous decisions when needed
 - **📦 Batch Processing**: Process multiple datasets automatically
+- **💡 Actionable Recommendations**: Get data-driven suggestions
 
 ## 🚀 Quick Start
 
@@ -30,11 +34,32 @@ from agentic_graphs import auto_visualize
 auto_visualize('data.csv')
 ```
 
+### With AI Analytics (NEW!)
+
+```python
+from agentic_graphs import AutonomousGraphSystem
+
+system = AutonomousGraphSystem()
+
+# Get visualization + AI insights
+fig, report = system.generate_with_analytics('data.csv')
+
+# View insights
+print(report.key_findings)
+print(report.recommendations)
+```
+
 ### Command Line
 
 ```bash
 # Automatically analyze and visualize
 python -m agentic_graphs.cli data.csv
+
+# With AI analytics
+python -m agentic_graphs.cli data.csv --analytics
+
+# Analytics only
+python -m agentic_graphs.cli data.csv --analytics-only
 
 # Save to file
 python -m agentic_graphs.cli data.csv -o my_visualization.html
@@ -46,6 +71,16 @@ python -m agentic_graphs.cli data.csv --viz-type 3d_network
 python -m agentic_graphs.cli file1.csv file2.json file3.xlsx --batch
 ```
 
+## 📚 Documentation
+
+Comprehensive documentation is available:
+
+- **[Quick Start Guide](docs/QUICK_START.md)** - Get started in 5 minutes
+- **[User Guide](docs/USER_GUIDE.md)** - Complete feature documentation
+- **[API Reference](docs/API_REFERENCE.md)** - Detailed API documentation
+- **[Architecture](docs/ARCHITECTURE.md)** - System internals and design
+- **[Testing Report](TESTING_REPORT.md)** - Comprehensive test results
+
 ## 📁 Project Structure
 
 ```
@@ -54,21 +89,33 @@ graphs/
 │   ├── agent_core.py         #    Autonomous decision-making agent
 │   ├── data_connectors.py    #    Multi-source data loaders
 │   ├── visualizers_3d.py     #    3D visualization engines
+│   ├── ai_analytics.py       #    AI-powered analytics engine (NEW!)
 │   ├── autonomous_system.py  #    Main orchestrator
 │   └── cli.py                #    Command-line interface
-├── scripts/                   # Legacy 2D visualization scripts
-│   ├── line_chart.py
-│   ├── bar_chart.py
-│   └── heatmap.py
+├── docs/                      # 📚 Comprehensive documentation
+│   ├── QUICK_START.md        #    5-minute quick start
+│   ├── USER_GUIDE.md         #    Complete user guide
+│   ├── API_REFERENCE.md      #    Detailed API docs
+│   └── ARCHITECTURE.md       #    System architecture
+├── examples/                  # Example scripts and outputs
+│   ├── example_basic.py      #    Basic usage examples
+│   ├── example_advanced.py   #    Advanced features
+│   └── analytics_demo.py     #    AI analytics demos (NEW!)
 ├── data/                      # Sample datasets
 │   ├── sample_data.csv
 │   ├── network_sample.csv
 │   ├── 3d_scatter_sample.csv
 │   └── surface_sample.csv
-├── examples/                  # Example scripts and outputs
-│   ├── example_basic.py
-│   └── example_advanced.py
-└── requirements.txt
+├── scripts/                   # Legacy 2D visualization scripts
+│   ├── line_chart.py
+│   ├── bar_chart.py
+│   └── heatmap.py
+├── test_system.py            # Basic test suite
+├── deep_test.py              # Comprehensive tests
+├── test_analytics.py         # Analytics tests (NEW!)
+├── README.md                 # This file
+├── TESTING_REPORT.md         # Test results
+└── requirements.txt          # Dependencies
 ```
 
 ## 🎨 Available 3D Visualizations
