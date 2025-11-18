@@ -1,0 +1,78 @@
+# Graphs Visualization Configuration
+
+# Data settings
+data:
+  default_path: "data/sample_data.csv"
+  required_columns:
+    - date
+    - category
+    - value
+
+# Output settings
+output:
+  default_directory: "examples"
+  default_format: "png"
+  dpi: 300
+  formats:
+    - png
+    - svg
+    - pdf
+
+# Visualization settings
+visualization:
+  default_style: "whitegrid"
+  default_context: "notebook"
+  color_scheme: "default"
+  figure_size:
+    width: 10
+    height: 6
+  font_sizes:
+    title: 16
+    label: 12
+    tick: 10
+
+# Chart-specific settings
+charts:
+  line:
+    marker: "o"
+    line_width: 2
+    grid: true
+  bar:
+    show_values: true
+    palette: "viridis"
+  heatmap:
+    colormap: "YlGnBu"
+    annotation: true
+  scatter:
+    size: 100
+    alpha: 0.6
+  pie:
+    explode: 0.05
+    autopct_format: "%1.1f%%"
+  area:
+    stacked: true
+    alpha: 0.7
+  box:
+    show_points: true
+    palette: "Set2"
+  violin:
+    inner: "box"
+    palette: "muted"
+  histogram:
+    bins: 10
+    alpha: 0.6
+  bubble:
+    size_multiplier: 10
+    edge_color: "black"
+  radar:
+    line_width: 2
+    fill_alpha: 0.25
+  surface_3d:
+    colormap: "viridis"
+    alpha: 0.8
+
+# Preprocessing settings
+preprocessing:
+  fill_na: true
+  remove_duplicates: true
+  handle_outliers: false
