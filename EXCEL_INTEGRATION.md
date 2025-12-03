@@ -369,3 +369,239 @@ For issues or questions:
 ---
 
 ✨ **Excel integration makes it easier than ever to visualize your data!**
+
+---
+
+## Embedding Charts in Excel Files
+
+### Overview
+
+You can now embed charts directly into Excel files, creating professional reports with data and visualizations in a single workbook.
+
+### Quick Start
+
+```bash
+# Embed a chart into an Excel file
+python scripts/embed_in_excel.py data/sample_data.xlsx --chart-type bar
+
+# Specify sheet and position
+python scripts/embed_in_excel.py data/report.xlsx --sheet Sales --chart-type line --position H2
+
+# Custom output file
+python scripts/embed_in_excel.py data/data.xlsx --output reports/final_report.xlsx
+```
+
+### Command-Line Usage
+
+```bash
+usage: embed_in_excel.py [-h] [--output OUTPUT] [--sheet SHEET]
+                        [--chart-type {line,bar,pie,scatter}]
+                        [--position POSITION] [--x X] [--y Y]
+                        excel_file
+
+arguments:
+  excel_file            Input Excel file
+  --output OUTPUT       Output Excel file (default: adds _with_chart suffix)
+  --sheet SHEET         Sheet name to use (default: first sheet)
+  --chart-type          Type of chart (line, bar, pie, scatter)
+  --position POSITION   Cell position for chart (e.g., H2, M10)
+  --x X                 X column for scatter plot
+  --y Y                 Y column for scatter plot
+```
+
+### Python API - Single Chart
+
+```python
+from scripts.embed_in_excel import embed_chart_in_excel
+
+# Embed a chart
+embed_chart_in_excel(
+    excel_path='data/sales.xlsx',
+    output_path='reports/sales_report.xlsx',
+    sheet_name='Q1',
+    chart_type='line',
+    position='H2'
+)
+```
+
+### Python API - Multiple Charts
+
+```python
+from scripts.embed_in_excel import embed_multiple_charts
+
+# Define multiple charts
+charts_config = [
+    {'sheet': 'Sales', 'chart_type': 'line', 'position': 'H2'},
+    {'sheet': 'Sales', 'chart_type': 'bar', 'position': 'H20'},
+    {'sheet': 'Costs', 'chart_type': 'pie', 'position': 'H2'},
+]
+
+# Embed all charts
+embed_multiple_charts(
+    excel_path='data/report.xlsx',
+    output_path='data/report_with_charts.xlsx',
+    charts_config=charts_config
+)
+```
+
+### Python API - Create Complete Report
+
+```python
+from scripts.embed_in_excel import create_report_with_charts
+import pandas as pd
+
+# Prepare your data
+sales_df = pd.DataFrame({
+    'date': ['2024-01', '2024-02', '2024-03'],
+    'category': ['A', 'A', 'A'],
+    'value': [100, 120, 115]
+})
+
+costs_df = pd.DataFrame({
+    'date': ['2024-01', '2024-02', '2024-03'],
+    'category': ['A', 'A', 'A'],
+    'value': [60, 70, 65]
+})
+
+# Define data sheets
+data_dict = {
+    'Sales': sales_df,
+    'Costs': costs_df
+}
+
+# Define chart positions
+chart_positions = {
+    'Sales': {'chart_type': 'line', 'position': 'F2'},
+    'Costs': {'chart_type': 'bar', 'position': 'F2'}
+}
+
+# Create report with data and charts
+create_report_with_charts(
+    data_dict=data_dict,
+    output_path='reports/monthly_report.xlsx',
+    chart_positions=chart_positions
+)
+```
+
+### Chart Positioning
+
+Charts are positioned using Excel cell references:
+
+- `H2` - Column H, Row 2 (default)
+- `A1` - Top-left corner
+- `M10` - Column M, Row 10
+- `AA5` - Column AA, Row 5
+
+**Tips:**
+- Leave 6-8 columns for data before the chart
+- Charts are 500px wide × 312px tall (fits ~8 columns × 15 rows)
+- Stack multiple charts vertically with 18-20 row spacing
+
+### Supported Chart Types
+
+| Type | Description | Best For |
+|------|-------------|----------|
+| `line` | Line chart with multiple series | Time series, trends |
+| `bar` | Vertical bar chart | Category comparison |
+| `pie` | Pie chart with percentages | Distribution, proportions |
+| `scatter` | Scatter plot | Correlation analysis |
+
+### Use Cases
+
+#### 1. Automated Reporting
+
+```python
+# Monthly report automation
+from scripts.embed_in_excel import create_report_with_charts
+import pandas as pd
+from datetime import datetime
+
+# Read latest data
+sales = pd.read_excel('current_month.xlsx', sheet_name='Sales')
+expenses = pd.read_excel('current_month.xlsx', sheet_name='Expenses')
+
+# Create report
+create_report_with_charts(
+    data_dict={'Sales': sales, 'Expenses': expenses},
+    output_path=f'reports/report_{datetime.now():%Y%m}.xlsx',
+    chart_positions={
+        'Sales': {'chart_type': 'line', 'position': 'H2'},
+        'Expenses': {'chart_type': 'bar', 'position': 'H2'}
+    }
+)
+```
+
+#### 2. Dashboard Creation
+
+```python
+# Create dashboard with multiple views
+charts = [
+    {'sheet': 'Overview', 'chart_type': 'line', 'position': 'H2'},
+    {'sheet': 'Overview', 'chart_type': 'pie', 'position': 'P2'},
+    {'sheet': 'Details', 'chart_type': 'bar', 'position': 'H2'},
+]
+
+embed_multiple_charts('data.xlsx', 'dashboard.xlsx', charts)
+```
+
+#### 3. Report Generation Pipeline
+
+```bash
+#!/bin/bash
+# Generate multiple reports
+
+# Process each data file
+for file in data/*.xlsx; do
+    name=$(basename "$file" .xlsx)
+    python scripts/embed_in_excel.py "$file" \
+        --output "reports/${name}_report.xlsx" \
+        --chart-type line
+done
+```
+
+### Best Practices
+
+1. **Chart Placement**: Place charts to the right of data (H column or later)
+2. **Multiple Charts**: Space charts 18-20 rows apart vertically
+3. **File Size**: Each embedded chart adds ~50-100KB
+4. **Performance**: Batch operations for multiple files
+5. **Testing**: Test with small files first
+
+### Limitations
+
+- Charts are embedded as images (not native Excel charts)
+- Cannot edit charts after embedding (must regenerate)
+- Limited to 4 chart types (line, bar, pie, scatter)
+- Charts are static (no interactive features)
+
+### Troubleshooting
+
+**Chart not appearing:**
+- Check cell position is valid (e.g., 'H2' not 'H')
+- Ensure position doesn't overlap with data
+- Verify sheet name is correct (case-sensitive)
+
+**Image quality issues:**
+- Charts are generated at 100 DPI
+- Increase DPI in `create_chart_image()` if needed
+- Consider SVG export for better quality
+
+**File size too large:**
+- Reduce number of embedded charts
+- Use lower DPI settings
+- Consider external image linking instead
+
+### Examples
+
+See `examples/embed_examples.py` for complete working examples:
+
+```bash
+cd examples
+python embed_examples.py
+```
+
+This creates 4 example reports demonstrating different embedding scenarios.
+
+---
+
+✨ **Create professional Excel reports with embedded visualizations!**
