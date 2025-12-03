@@ -19,3 +19,9 @@ colorama==0.4.6
 
 # Bash completion for argparse
 argcomplete==3.5.1
+
+# Enhancements - Additional dependencies
+PyYAML==6.0.2         # Configuration file support
+pytest==8.3.4          # Unit testing framework
+jupyter==1.1.1         # Notebook support
+kaleido==0.2.1        # Static image export for Plotly

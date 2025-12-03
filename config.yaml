@@ -1,0 +1,42 @@
+# Configuration file for graphs visualization
+
+# Output settings
+output:
+  format: png        # Default format: png, svg, pdf
+  dpi: 300          # Resolution for raster formats
+  directory: examples  # Default output directory
+
+# Style settings
+style:
+  theme: whitegrid   # Seaborn theme: whitegrid, darkgrid, white, dark, ticks
+  palette: viridis   # Color palette: viridis, plasma, Set2, husl, etc.
+  figure_size:
+    - 10
+    - 6
+  font_size: 12
+  title_size: 16
+
+# Chart-specific settings
+charts:
+  line:
+    marker: o
+    linewidth: 2
+    alpha: 0.8
+  scatter:
+    size: 100
+    alpha: 0.7
+    show_trend: true
+  bar:
+    show_values: true
+    value_offset: 1
+
+# Logging settings
+logging:
+  level: INFO  # DEBUG, INFO, WARNING, ERROR
+  format: '%(levelname)s: %(message)s'
+
+# Data processing
+data:
+  drop_na: true
+  date_format: '%Y-%m-%d'
+  encoding: utf-8
