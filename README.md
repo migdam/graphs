@@ -1,6 +1,55 @@
+<div align="center">
+
+![Banner](examples/banner.png)
+
 # Graphs Visualization Repository
 
+[![Python](https://img.shields.io/badge/Python-3.8%2B-blue?logo=python&logoColor=white)](https://www.python.org/)
+[![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
+[![Matplotlib](https://img.shields.io/badge/Matplotlib-3.9.2-orange)](https://matplotlib.org/)
+[![Seaborn](https://img.shields.io/badge/Seaborn-0.13.2-teal)](https://seaborn.pydata.org/)
+[![Stars](https://img.shields.io/github/stars/migdam/graphs?style=social)](https://github.com/migdam/graphs/stargazers)
+
 A comprehensive Python library for creating beautiful data visualizations and graphs. This repository contains ready-to-use scripts for generating various types of charts from CSV data.
+
+[Features](#-features) • [Gallery](#-gallery) • [Installation](#-getting-started) • [Usage](#-usage-examples) • [Contributing](#-contributing)
+
+</div>
+
+## 📸 Gallery
+
+### Sample Visualizations
+
+<table>
+  <tr>
+    <td><img src="examples/demo_line_chart.png" alt="Line Chart" width="400"/></td>
+    <td><img src="examples/demo_bar_chart.png" alt="Bar Chart" width="400"/></td>
+  </tr>
+  <tr>
+    <td align="center"><b>Line Chart</b> - Trend analysis over time</td>
+    <td align="center"><b>Bar Chart</b> - Categorical comparisons</td>
+  </tr>
+  <tr>
+    <td><img src="examples/demo_scatter.png" alt="Scatter Plot" width="400"/></td>
+    <td><img src="examples/demo_pie_chart.png" alt="Pie Chart" width="400"/></td>
+  </tr>
+  <tr>
+    <td align="center"><b>Scatter Plot</b> - Correlation with trend lines</td>
+    <td align="center"><b>Pie Chart</b> - Distribution visualization</td>
+  </tr>
+  <tr>
+    <td><img src="examples/demo_heatmap.png" alt="Heatmap" width="400"/></td>
+    <td><img src="examples/demo_dashboard.png" alt="Dashboard" width="400"/></td>
+  </tr>
+  <tr>
+    <td align="center"><b>Heatmap</b> - Matrix data visualization</td>
+    <td align="center"><b>Dashboard</b> - Multi-panel analytics</td>
+  </tr>
+</table>
+
+### All Chart Types at a Glance
+
+![Features Showcase](examples/features_showcase.png)
 
 ## 🎯 Features
 
