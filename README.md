@@ -53,7 +53,7 @@ A comprehensive Python library for creating beautiful data visualizations and gr
 
 ## 🎯 Features
 
-- **8 Visualization Types**: Line charts, bar charts, heatmaps, scatter plots, pie/donut charts, area charts, violin plots, and network graphs
+- **10 Visualization Types**: Line charts, bar charts, heatmaps, scatter plots, pie/donut charts, area charts, violin plots, network graphs, Gantt charts, and milestone timelines
 - **Multiple Export Formats**: PNG, SVG, and PDF support
 - **Error Handling**: Robust validation and error reporting
 - **Flexible Configuration**: Command-line arguments for customization
@@ -200,6 +200,26 @@ python scripts/network_graph.py --data data/network_data.csv --layout circular
 python scripts/network_graph.py --data data/network_data.csv --weight weight
 ```
 
+### Gantt Chart
+Visualize project timelines and task progress:
+```bash
+# Basic Gantt chart
+python scripts/gantt_chart.py --data data/project_timeline.csv
+
+# Export as PDF
+python scripts/gantt_chart.py --data data/project_timeline.csv --format pdf
+```
+
+### Milestone Chart
+Track project milestones and their status:
+```bash
+# Basic milestone timeline
+python scripts/milestone_chart.py --data data/milestones.csv
+
+# High resolution for presentations
+python scripts/milestone_chart.py --data data/milestones.csv --format svg
+```
+
 ## 🛠️ Command-Line Options
 
 All scripts support these common options:
@@ -285,6 +305,22 @@ Requires columns: `source`, `target`, optional `weight`
 source,target,weight
 A,B,3
 B,C,2
+```
+
+### Gantt Chart
+Requires columns: `task`, `start_date`, `end_date`, optional `progress`, `owner`
+```csv
+task,start_date,end_date,progress,owner
+Planning,2024-01-01,2024-01-15,100,Team A
+Development,2024-01-10,2024-03-15,75,Team B
+```
+
+### Milestone Chart
+Requires columns: `milestone`, `date`, optional `status`, `description`
+```csv
+milestone,date,status,description
+Project Kickoff,2024-01-01,completed,Initial meeting
+Beta Release,2024-03-15,in_progress,Testing phase
 ```
 
 ## 🔧 Troubleshooting
