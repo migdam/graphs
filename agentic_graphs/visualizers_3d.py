@@ -158,7 +158,7 @@ class Surface3DVisualizer(Base3DVisualizer):
         # Pivot data for surface plot
         try:
             pivot_df = df.pivot_table(values=z_col, index=y_col, columns=x_col, aggfunc='mean')
-        except:
+        except Exception:
             # If pivot fails, create a grid
             x = df[x_col].values
             y = df[y_col].values
@@ -296,11 +296,16 @@ class Network3DVisualizer(Base3DVisualizer):
 
         if target_col is None:
             for col in df.columns:
+                # Skip the column already used as source
+                if col == source_col:
+                    continue
                 if any(kw in col.lower() for kw in ['target', 'to', 'node2', 'dst', 'dest']):
                     target_col = col
                     break
             if target_col is None:
-                source_col = df.columns[1] if len(df.columns) > 1 else df.columns[0]
+                # Fall back to the first column that isn't the source
+                remaining = [c for c in df.columns if c != source_col]
+                target_col = remaining[0] if remaining else df.columns[0]
 
         # Create NetworkX graph
         G = nx.from_pandas_edgelist(
@@ -465,6 +470,74 @@ class Bar3DVisualizer(Base3DVisualizer):
         return fig
 
 
+class Mesh3DVisualizer(Base3DVisualizer):
+    """Create beautiful 3D mesh plots for spatial point clouds"""
+
+    def create(
+        self,
+        df: pd.DataFrame,
+        x_col: Optional[str] = None,
+        y_col: Optional[str] = None,
+        z_col: Optional[str] = None,
+        color_col: Optional[str] = None,
+        output_path: Optional[str] = None,
+        title: Optional[str] = None,
+        colorscale: str = 'Viridis',
+        **kwargs
+    ) -> go.Figure:
+        """
+        Create a 3D mesh (triangulated surface) from spatial points.
+
+        Args:
+            df: Input DataFrame
+            x_col, y_col, z_col: Column names for x, y, z axes (auto-detected if None)
+            color_col: Optional column for intensity/color
+            colorscale: Plotly colorscale name
+        """
+        if self.verbose:
+            print("🎨 Creating 3D mesh plot...")
+
+        numeric_cols = df.select_dtypes(include=[np.number]).columns.tolist()
+
+        if x_col is None:
+            x_col = numeric_cols[0] if len(numeric_cols) > 0 else df.columns[0]
+        if y_col is None:
+            y_col = numeric_cols[1] if len(numeric_cols) > 1 else df.columns[1]
+        if z_col is None:
+            z_col = numeric_cols[2] if len(numeric_cols) > 2 else df.columns[2]
+
+        intensity = df[color_col] if color_col and color_col in df.columns else df[z_col]
+
+        # Mesh3d performs Delaunay triangulation when no faces are provided
+        fig = go.Figure(data=[go.Mesh3d(
+            x=df[x_col],
+            y=df[y_col],
+            z=df[z_col],
+            intensity=intensity,
+            colorscale=colorscale,
+            opacity=0.85,
+            colorbar=dict(title=color_col or z_col),
+            alphahull=0,  # convex hull / Delaunay-style surface
+        )])
+
+        fig.update_layout(
+            title=title or f"3D Mesh: {x_col}, {y_col}, {z_col}",
+            template=self.default_config['theme'],
+            width=self.default_config['width'],
+            height=self.default_config['height'],
+            scene=dict(
+                xaxis_title=x_col,
+                yaxis_title=y_col,
+                zaxis_title=z_col,
+            )
+        )
+
+        if output_path:
+            self._save_figure(fig, output_path)
+
+        return fig
+
+
 class VisualizerFactory:
     """Factory to create appropriate visualizer"""
 
@@ -474,6 +547,7 @@ class VisualizerFactory:
         '3d_line': Line3DVisualizer,
         '3d_network': Network3DVisualizer,
         '3d_bar': Bar3DVisualizer,
+        '3d_mesh': Mesh3DVisualizer,
     }
 
     @classmethod

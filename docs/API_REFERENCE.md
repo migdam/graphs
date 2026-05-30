@@ -257,7 +257,7 @@ available_visualizations() -> List[str]
 **Example**:
 ```python
 viz_types = system.available_visualizations()
-# ['3d_scatter', '3d_surface', '3d_line', '3d_network', '3d_bar']
+# ['3d_scatter', '3d_surface', '3d_line', '3d_network', '3d_bar', '3d_mesh']
 ```
 
 ---
@@ -740,7 +740,7 @@ data_source              Data source(s) - file path, URL, or SQL query
 ```
 --viz-type TYPE          Force specific visualization type
                          Choices: 3d_scatter, 3d_surface, 3d_line,
-                                 3d_network, 3d_bar
+                                 3d_network, 3d_bar, 3d_mesh
 --source-type TYPE       Specify data source type
                          Choices: csv, json, excel, sql, api
 ```

@@ -8,7 +8,7 @@ A fully autonomous system that creates **beautiful 3D visualizations** from any 
 
 - **🧠 Fully Autonomous**: Automatically analyzes data and selects the best visualization
 - **📊 Multiple Data Sources**: CSV, JSON, Excel, SQL databases, REST APIs, pandas DataFrames
-- **🎨 Beautiful 3D Visualizations**: Network graphs, scatter plots, surfaces, lines, and more
+- **🎨 Beautiful 3D Visualizations**: Network graphs, scatter plots, surfaces, lines, bars, and meshes
 - **🤖 AI-Powered Analytics**: Automatic insight extraction, pattern detection, trend analysis
 - **🔍 Intelligent Analysis**: Detects patterns, relationships, and data characteristics
 - **⚡ Easy to Use**: One-line command to visualize any data
@@ -21,8 +21,20 @@ A fully autonomous system that creates **beautiful 3D visualizations** from any 
 ### Installation
 
 ```bash
-# Install dependencies
+# Option 1: install dependencies only
 pip install -r requirements.txt
+
+# Option 2: install as a package (provides the `agentic-graphs` CLI command)
+pip install -e .
+
+# Optional extras for Excel, SQL, and static image export
+pip install -e ".[all]"
+```
+
+Once installed as a package you can use the `agentic-graphs` command directly:
+
+```bash
+agentic-graphs data.csv --analytics
 ```
 
 ### Simplest Usage

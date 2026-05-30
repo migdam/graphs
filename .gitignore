@@ -25,6 +25,10 @@ examples/*.jpg
 examples/*.svg
 examples/*.pdf
 
+# Generated visualization/analytics outputs from test & demo runs
+examples/deep_test_*.html
+examples/*_net_nokeyword.html
+
 # Jupyter Notebook
 .ipynb_checkpoints
 

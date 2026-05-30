@@ -33,7 +33,8 @@ from .data_connectors import (
     JSONConnector,
     ExcelConnector,
     SQLConnector,
-    APIConnector
+    APIConnector,
+    DataFrameConnector
 )
 from .visualizers_3d import VisualizerFactory
 from .ai_analytics import AIGraphAnalytics, AnalyticsReport, GraphInsight
@@ -59,6 +60,7 @@ __all__ = [
     'ExcelConnector',
     'SQLConnector',
     'APIConnector',
+    'DataFrameConnector',
 
     # Visualizers
     'VisualizerFactory',

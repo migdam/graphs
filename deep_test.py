@@ -67,8 +67,9 @@ def test_all_imports():
     # Test visualizer types
     viz_types = VisualizerFactory.available_types()
     print(f"✓ Available visualizations: {viz_types}")
-    assert len(viz_types) == 5, "Expected 5 visualization types"
-    print("✓ All 5 visualization types available")
+    expected_types = {'3d_scatter', '3d_surface', '3d_line', '3d_network', '3d_bar', '3d_mesh'}
+    assert expected_types.issubset(set(viz_types)), f"Missing visualization types: {expected_types - set(viz_types)}"
+    print(f"✓ All {len(expected_types)} visualization types available")
 
 
 def test_csv_data_loading():
@@ -447,7 +448,7 @@ def test_error_handling():
             show=False
         )
         assert False, "Should have raised error for invalid viz type"
-    except:
+    except ValueError:
         print("✓ Correctly handles invalid visualization type")
 
 
@@ -540,6 +541,69 @@ def test_auto_visualize_function():
     print("✓ auto_visualize convenience function works")
 
 
+def test_mesh_3d_visualization():
+    """Regression: 3d_mesh is suggested by the agent, so it must be renderable."""
+    from agentic_graphs import AutonomousGraphSystem
+    from agentic_graphs.visualizers_3d import VisualizerFactory
+
+    assert '3d_mesh' in VisualizerFactory.available_types(), "3d_mesh not registered"
+
+    df = pd.DataFrame({
+        'x': np.random.randn(30),
+        'y': np.random.randn(30),
+        'z': np.random.randn(30),
+    })
+
+    system = AutonomousGraphSystem(verbose=False)
+    output_path = 'examples/deep_test_mesh.html'
+    fig = system.generate(df, viz_type='3d_mesh', output_path=output_path, show=False)
+
+    assert fig is not None, "Mesh figure not generated"
+    assert Path(output_path).exists(), "Mesh output file not created"
+    print("✓ 3D mesh visualization works (gap fixed)")
+
+
+def test_network_without_target_keyword():
+    """Regression: network auto-detection must work when no column is named 'target'."""
+    from agentic_graphs.visualizers_3d import Network3DVisualizer
+
+    # Neither column matches target/to/dst keywords
+    df = pd.DataFrame({
+        'person': ['A', 'B', 'C', 'D'],
+        'friend': ['B', 'C', 'D', 'A'],
+        'weight': [1, 2, 3, 4],
+    })
+
+    viz = Network3DVisualizer(verbose=False)
+    fig = viz.create(df, output_path='examples/deep_test_net_nokeyword.html')
+    assert fig is not None, "Network figure not generated"
+    print("✓ Network auto-detection works without 'target' keyword (gap fixed)")
+
+
+def test_explicit_viz_override_honored():
+    """Regression: an explicit, valid viz_type must override autonomous choice."""
+    from agentic_graphs.agent_core import AutonomousGraphAgent
+
+    # Network data: 3d_scatter would NOT be auto-suggested
+    df = pd.DataFrame({
+        'source': ['A', 'B', 'C'],
+        'target': ['B', 'C', 'A'],
+        'weight': [1, 2, 3],
+    })
+
+    agent = AutonomousGraphAgent(verbose=False)
+    viz_type, _ = agent.decide_visualization(df, preference='3d_scatter')
+    assert viz_type == '3d_scatter', f"Override ignored, got {viz_type}"
+
+    # And an invalid type must raise a clear error
+    try:
+        agent.decide_visualization(df, preference='not_a_real_type')
+        assert False, "Should have raised for invalid viz type"
+    except ValueError:
+        pass
+    print("✓ Explicit viz_type override honored; invalid type rejected (gap fixed)")
+
+
 def main():
     """Run comprehensive deep testing suite"""
     print("="*70)
@@ -569,6 +633,11 @@ def main():
     tester.test("3D Surface visualization", test_surface_3d_visualization)
     tester.test("3D Line visualization", test_line_3d_visualization)
     tester.test("3D Bar visualization", test_bar_3d_visualization)
+    tester.test("3D Mesh visualization", test_mesh_3d_visualization)
+
+    # Regression tests for fixed gaps
+    tester.test("Network without target keyword", test_network_without_target_keyword)
+    tester.test("Explicit viz_type override honored", test_explicit_viz_override_honored)
 
     # Autonomous system tests
     tester.test("Autonomous decision making", test_autonomous_decision_making)

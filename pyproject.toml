@@ -1,0 +1,43 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "agentic-graphs"
+version = "1.1.0"
+description = "Autonomous system that creates beautiful 3D visualizations and AI-powered analytics from any data source"
+readme = "README.md"
+requires-python = ">=3.8"
+license = { text = "MIT" }
+authors = [{ name = "Autonomous Graph System" }]
+keywords = ["visualization", "3d", "plotly", "analytics", "autonomous", "graphs"]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Topic :: Scientific/Engineering :: Visualization",
+]
+dependencies = [
+    "numpy>=1.20.0",
+    "pandas>=1.3.0",
+    "plotly>=5.3.0",
+    "networkx>=2.6.0",
+    "scipy>=1.7.0",
+    "requests>=2.26.0",
+]
+
+[project.optional-dependencies]
+excel = ["openpyxl>=3.0.0"]
+sql = ["sqlalchemy>=1.4.0"]
+images = ["kaleido>=0.2.1"]
+all = [
+    "openpyxl>=3.0.0",
+    "sqlalchemy>=1.4.0",
+    "kaleido>=0.2.1",
+]
+
+[project.scripts]
+agentic-graphs = "agentic_graphs.cli:main"
+
+[tool.setuptools]
+packages = ["agentic_graphs"]

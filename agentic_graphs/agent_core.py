@@ -69,7 +69,7 @@ class AutonomousGraphAgent:
                 column_types[col] = 'numeric'
             elif pd.api.types.is_datetime64_any_dtype(df[col]):
                 column_types[col] = 'temporal'
-            elif pd.api.types.is_categorical_dtype(df[col]) or df[col].dtype == 'object':
+            elif isinstance(df[col].dtype, pd.CategoricalDtype) or df[col].dtype == 'object':
                 column_types[col] = 'categorical'
             else:
                 column_types[col] = 'unknown'
@@ -274,6 +274,10 @@ class AutonomousGraphAgent:
         """
         Autonomously decide on the best visualization type.
 
+        An explicit ``preference`` is always honored as long as it names a real
+        visualizer, even when the agent would not have suggested it on its own.
+        This lets callers force, e.g., a ``3d_scatter`` of network data.
+
         Args:
             df: DataFrame to visualize
             preference: Optional user preference to override autonomous decision
@@ -281,15 +285,24 @@ class AutonomousGraphAgent:
         Returns:
             Tuple of (visualization_type, data_profile)
         """
+        from .visualizers_3d import VisualizerFactory
+
         profile = self.analyze_data(df)
 
-        if preference and preference in profile.suggested_visualizations:
-            viz_type = preference
-            if self.verbose:
-                print(f"✓ Using user preference: {viz_type}")
+        if preference:
+            if preference in VisualizerFactory.available_types():
+                viz_type = preference
+                if self.verbose:
+                    print(f"✓ Using user preference: {viz_type}")
+            else:
+                raise ValueError(
+                    f"Unknown visualization type: {preference!r}. "
+                    f"Available: {VisualizerFactory.available_types()}"
+                )
         else:
             viz_type = profile.suggested_visualizations[0]
             if self.verbose:
-                print(f"🤖 Autonomous decision: {viz_type} (confidence: {profile.confidence_scores[viz_type]:.1%})")
+                confidence = profile.confidence_scores.get(viz_type, 0.5)
+                print(f"🤖 Autonomous decision: {viz_type} (confidence: {confidence:.1%})")
 
         return viz_type, profile

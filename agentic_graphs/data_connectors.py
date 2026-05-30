@@ -37,7 +37,7 @@ class CSVConnector(DataConnector):
             if 'date' in col.lower() or 'time' in col.lower():
                 try:
                     df[col] = pd.to_datetime(df[col])
-                except:
+                except (ValueError, TypeError):
                     pass
 
         if self.verbose:
@@ -283,10 +283,14 @@ class AutoConnector:
             try:
                 json.loads(source)
                 return 'json'
-            except:
+            except (json.JSONDecodeError, ValueError):
                 pass
 
-        raise ValueError(f"Could not auto-detect source type for: {source}")
+        raise ValueError(
+            f"Could not auto-detect source type for: {source!r}. "
+            f"If this is a file, check that the path exists; otherwise pass "
+            f"source_type explicitly (one of 'csv', 'json', 'excel', 'sql', 'api')."
+        )
 
 
 # Convenience function for quick loading
